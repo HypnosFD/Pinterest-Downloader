@@ -162,6 +162,7 @@ def get_pin_info(pin_id, arg_timestamp_log, url_path
     scripts = []
     is_success = False
     image = None
+    r = None
     for t in RETRY_TIMEOUTS:
         cookies = load_cookies(cookie_file)
         
@@ -230,7 +231,8 @@ def get_pin_info(pin_id, arg_timestamp_log, url_path
     if not is_success:
         if not get_data_only:
             print('### HTML START ###')
-            print(r.content)
+            if r is not None:
+                print(r.content)
             print('### HTML END ###\n\nPlease report this issue at https://github.com/HypnosFD/pinterest-downloader/issues , thanks.\n\n')
             cprint(''.join([ HIGHER_RED, '%s %s%s' % ('\n[' + x_tag 
                 + '] Get this pin id failed :', pin_id, '\n') ]), attrs=BOLD_ONLY, end='' )
