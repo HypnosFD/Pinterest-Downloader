@@ -12,7 +12,7 @@ import traceback
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pinterest_downloader.ui import (
-    IS_WIN, ANSI_CLEAR, HIGHER_RED, BOLD_ONLY, cprint,
+    IS_WIN, ANSI_CLEAR, HIGHER_RED, BOLD_ONLY, cprint, quit,
     x_tag, done_tag, plus_tag, pinterest_logo,
 )
 from pinterest_downloader.orchestrator import run_library_main, update_all
