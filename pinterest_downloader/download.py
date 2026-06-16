@@ -89,10 +89,20 @@ def download_img(image, save_dir, arg_force_update, arg_img_only, arg_v_only, IM
         if not arg_v_only and ('images' in image):
             if arg_quality != 'orig' and arg_quality in image.get('images', {}):
                 url = image['images'][arg_quality]['url']
-            elif 'orig' in image.get('images', {}):
-                url = image['images']['orig']['url']
             else:
-                url = image['images'][list(image['images'].keys())[-1]]['url']
+                imgDimens = []
+                imgDimensD = {}
+                for ik, iv in image['images'].items():
+                    if 'x' in ik:
+                        imgDimens.append(iv['width'])
+                        imgDimensD[iv['width']] = iv['url']
+                if imgDimens:
+                    imgDimens.sort(key=int)
+                    url = imgDimensD[int(imgDimens[-1])]
+                elif 'orig' in image.get('images', {}):
+                    url = image['images']['orig']['url']
+                else:
+                    url = image['images'][list(image['images'].keys())[-1]]['url']
 
             file_path = get_output_file_path(url, arg_cut, fs_f_max, image_id, human_fname, save_dir)
             if arg_el:
@@ -106,30 +116,6 @@ def download_img(image, save_dir, arg_force_update, arg_img_only, arg_v_only, IM
                     cprint(''.join([ HIGHER_RED, '%s' % ('\n[e1] You may want to delete this image manually and retry later(with -rs or try with single pin '
                     + ('https://www.pinterest.com/pin/' + repr(image['id']).strip("'")  ) + ').\n\n') ]), attrs=BOLD_ONLY, end='' )
                     return
-
-                else:
-                    imgDimens = []
-                    imgDimensD = {}
-                    for ik, iv in image['images'].items():
-                        if 'x' in ik:
-                            imgDimens.append(iv['width'])
-                            imgDimensD[iv['width']] =  iv['url']
-                    if imgDimens:
-                        imgDimens.sort(key=int)
-                        url = imgDimensD[int(imgDimens[-1])]
-
-                        file_path = get_output_file_path(url, arg_cut, fs_f_max, image_id, human_fname, save_dir)
-                        if arg_el:
-                            file_path = '\\\\?\\' + os.path.abspath(file_path)
-
-                        if not os.path.exists(file_path) or arg_force_update:
-                            success, IMG_SESSION = download_with_retry(IMG_SESSION, url, file_path, proxies, cookie_file, session_ver=3)
-                            if not success:
-                                cprint(''.join([ HIGHER_RED, '%s %s %s %s%s' % ('\n[' + x_tag + '] Retried this image at'
-                                    , file_path, 'failed :', url, '\n') ]), attrs=BOLD_ONLY, end='' )
-                                cprint(''.join([ HIGHER_RED, '%s' % ('\n[e2] You may want to delete this image manually and retry later.\n\n') ]), attrs=BOLD_ONLY, end='' )
-                        else:
-                            pass
 
         else:
             pass
