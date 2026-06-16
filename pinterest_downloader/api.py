@@ -470,6 +470,7 @@ Please ensure your username/boardname/[section] or link has media item.\n') )
         else:
             url = '/'.join((uname, board_slug))
 
+    latest_pin = '0'
     if not arg_rescrape:
         latest_pin = get_latest_pin(save_dir)
 
