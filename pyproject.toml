@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pinterest-downloader"
+version = "2.0.0"
+description = "Download all images/videos from Pinterest user/board/section"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+authors = [
+    {name = "Lim Kok Hole", email = "limkokhole@gmail.com"}
+]
+keywords = ["pinterest", "downloader", "images", "videos"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Multimedia :: Graphics",
+]
+dependencies = [
+    "requests>=2.28",
+    "lxml>=4.9",
+    "colorama>=0.4",
+    "termcolor>=2.0",
+    "fake-useragent>=1.4",
+]
+
+[project.optional-dependencies]
+socks = ["pysocks>=1.7"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+pinterest-downloader = "pinterest_downloader.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/HypnosFD/pinterest-downloader"
+Issues = "https://github.com/HypnosFD/pinterest-downloader/issues"
+
+[tool.setuptools.packages.find]
+include = ["pinterest_downloader*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "network: marks tests that require network access",
+]
