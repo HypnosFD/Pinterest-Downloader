@@ -19,7 +19,7 @@
 
 A fast, reliable CLI tool to batch-download images and videos from Pinterest. Supports downloading by **username**, **board**, **section**, or **single pin** — with incremental updates, multi-threading, and proxy support.
 
-> **Forked from** [limkokhole/pinterest-downloader](https://github.com/limkokhole/pinterest-downloader) — original author: Lim Kok Hole
+> **Forked from** [limkokhole/pinterest-downloader](https://github.com/limkokhole/pinterest-downloader)
 
 ---
 
