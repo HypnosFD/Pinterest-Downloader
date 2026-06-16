@@ -1,55 +1,90 @@
-# pinterest-downloader
+<h align="center">
 
-Download all images/videos from Pinterest user/board/section.
+  pinterest-downloader
 
-[![CI](https://github.com/HypnosFD/pinterest-downloader/actions/workflows/ci.yml/badge.svg)](https://github.com/HypnosFD/pinterest-downloader/actions/workflows/ci.yml)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+  <br>
+
+  Download all images & videos from Pinterest boards, sections, and pins.
+
+  [![CI](https://github.com/HypnosFD/pinterest-downloader/actions/workflows/ci.yml/badge.svg)](https://github.com/HypnosFD/pinterest-downloader/actions/workflows/ci.yml)
+  [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+  [![Tests](https://img.shields.io/badge/tests-44%20passed-brightgreen)](tests/)
+
+</h>
+
+<br>
+
+## Overview
+
+A fast, reliable CLI tool to batch-download images and videos from Pinterest. Supports downloading by **username**, **board**, **section**, or **single pin** — with incremental updates, multi-threading, and proxy support.
+
+> **Forked from** [limkokhole/pinterest-downloader](https://github.com/limkokhole/pinterest-downloader) — original author: Lim Kok Hole
+
+---
 
 ## Features
 
-### Download Modes
-- [x] Download by **username** — all boards from a user
-- [x] Download by **username/boardname** — all pins from a board
-- [x] Download by **username/boardname/section** — pins from a specific section
-- [x] Download **single pin** by URL or Pin ID
-- [x] Accept full URL or shorthand format (`username/boardname`)
-- [x] Expand shortened `pin.it` share links
+<table>
+<tr><td>
 
-### Quality & Format
-- [x] Download images at **original resolution** (or choose 736x, 474x, 236x)
-- [x] Download **both images and videos** with automatic quality selection
-- [x] Fallback to second-best resolution on download error
-- [x] LD+JSON fallback for pin page parsing
+**Download Modes**
+- By **username** — all boards
+- By **username/boardname** — all pins
+- By **username/boardname/section** — specific section
+- **Single pin** by URL or ID
+- Expand shortened `pin.it` links
 
-### Smart Features
-- [x] **Incremental updates** — only download new pins since last run
-- [x] **Max count limit** (`-n`) — download only N pins per board
-- [x] **Dry run mode** (`--dry-run`) — preview what would be downloaded
-- [x] **Rate limiting** (`--delay`) — add delay between downloads
-- [x] **Multi-threaded** downloads for speed
+</td><td>
 
-### File Management
-- [x] Meaningful filenames: `PinID_Title_Description_Date.ext`
-- [x] Automatic filename truncation to fit filesystem limits
-- [x] Windows extended-length path support (`\\?\`)
-- [x] Timestamp suffixes for boards and logs
-- [x] Detailed log file with pin metadata
+**Quality & Performance**
+- Original resolution (or 736x, 474x, 236x)
+- Both images and videos
+- Multi-threaded downloads
+- Rate limiting with `--delay`
+- Retry with exponential backoff
 
-### Network & Auth
-- [x] **Cookie/token support** for private/secret boards
-- [x] **Proxy support** (HTTP and HTTPS/SOCKS)
-- [x] Automatic CSRF token handling
-- [x] Retry with exponential backoff on failures
+</td></tr>
+<tr><td>
 
-### Bulk Operations
-- [x] **Update all** (`-ua`) — recursively update all downloaded folders
-- [x] **Exclude sections** (`-es`) from board downloads
-- [x] **Image-only** (`-io`) or **video-only** (`-vo`) modes
+**Smart Features**
+- Incremental updates (new pins only)
+- Max count limit (`-n`)
+- Dry run mode (`--dry-run`)
+- LD+JSON fallback parsing
 
-## Installation
+</td><td>
 
-### From source (recommended)
+**File Management**
+- Meaningful filenames with metadata
+- Auto-truncation for filesystem limits
+- Windows extended-length paths
+- Timestamp suffixes for boards/logs
+- Detailed log files
+
+</td></tr>
+<tr><td>
+
+**Network & Auth**
+- Cookie/token support for private boards
+- HTTP and SOCKS proxy support
+- Automatic CSRF token handling
+
+</td><td>
+
+**Bulk Operations**
+- Update all folders (`-ua`)
+- Exclude sections (`-es`)
+- Image-only (`-io`) or video-only (`-vo`)
+
+</td></tr>
+</table>
+
+---
+
+## Quick Start
+
+### From Source
 
 ```bash
 git clone https://github.com/HypnosFD/pinterest-downloader.git
@@ -57,18 +92,18 @@ cd pinterest-downloader
 pip install -r requirements.txt
 ```
 
-### Via pip (development)
+### Via pip (Development)
 
 ```bash
 pip install -e .
 ```
 
+---
+
 ## Usage
 
-### Command Line
-
 ```bash
-# Interactive mode — prompts for path
+# Interactive mode
 python pinterest-downloader.py
 
 # Download all boards from a user
@@ -83,90 +118,41 @@ python pinterest-downloader.py antonellomiglio/computer/condiments
 # Download a single pin
 python pinterest-downloader.py https://www.pinterest.com/pin/566538828106779478/
 
-# Download with custom output directory
-python pinterest-downloader.py antonellomiglio/computer -d my_images
+# Download with options
+python pinterest-downloader.py antonellomiglio/computer -d my_images -n 10 -q 736x
 
-# Download only 10 pins (max count)
-python pinterest-downloader.py antonellomiglio/computer -n 10
-
-# Download at 736x quality (faster, smaller files)
-python pinterest-downloader.py antonellomiglio/computer -q 736x
-
-# Preview what would be downloaded (dry run)
+# Preview without downloading
 python pinterest-downloader.py antonellomiglio/computer --dry-run
-
-# Rate limit: 1 second delay between downloads
-python pinterest-downloader.py antonellomiglio/computer --delay 1
-
-# Force re-download all files
-python pinterest-downloader.py antonellomiglio/computer -f -rs
-
-# Download only images (skip videos)
-python pinterest-downloader.py antonellomiglio/computer -io
-
-# Download with proxy
-python pinterest-downloader.py antonellomiglio/computer -ps "socks5://proxy:1080"
-
-# Use cookies for private boards
-python pinterest-downloader.py antonellomiglio/secret-board -co cookies.txt
 
 # Update all previously downloaded folders
 python pinterest-downloader.py -ua
+
+# Use cookies for private boards
+python pinterest-downloader.py antonellomiglio/secret-board -co cookies.txt
 ```
 
-### Via pip entry point
-
-```bash
-pip install -e .
-pinterest-downloader antonellomiglio/computer
-```
-
-### As a Python module
+### Via Module
 
 ```bash
 python -m pinterest_downloader antonellomiglio/computer
 ```
 
-### Programmatic usage
+### Programmatic Usage
 
 ```python
 from pinterest_downloader import run_main
 
-# Download a board
 run_main(
     path='antonellomiglio/computer',
     dir='my_images',
     quality='736x',
     max_count=10,
 )
-
-# Or use the orchestrator directly
-from pinterest_downloader.orchestrator import run_library_main
-
-run_library_main(
-    arg_path='antonellomiglio/computer',
-    arg_dir='my_images',
-    arg_thread_max=0,
-    arg_cut=-1,
-    arg_board_timestamp=False,
-    arg_log_timestamp=False,
-    arg_force=False,
-    arg_exclude_section=False,
-    arg_rescrape=False,
-    arg_img_only=False,
-    arg_v_only=False,
-    arg_update_all=False,
-    arg_https_proxy=None,
-    arg_http_proxy=None,
-    arg_cookies=None,
-    arg_max_count=10,
-    arg_quality='736x',
-    arg_dry_run=False,
-    arg_delay=0,
-)
 ```
 
-## All Options
+---
+
+## Options
 
 | Short | Long | Description |
 |-------|------|-------------|
@@ -189,6 +175,17 @@ run_library_main(
 | | `--dry-run` | Preview without downloading |
 | | `--delay SECS` | Delay between downloads (rate limit) |
 
+---
+
+## Cookie Setup for Private Boards
+
+1. Log into Pinterest in your browser
+2. Export cookies using a browser extension (e.g., [Get Token Cookie](https://chrome.google.com/webstore/detail/get-token-cookie/naciaagbkifhpnoodlkhbejjldaiffcm))
+3. Save cookies to `cookies.txt` in the project directory
+4. Run with `-co cookies.txt`
+
+---
+
 ## Project Structure
 
 ```
@@ -204,24 +201,28 @@ pinterest_downloader/            # Main package
     api.py                       # Pinterest API interaction
     orchestrator.py              # Main workflow dispatcher
     cli.py                       # CLI argument parsing
-tests/                           # Unit tests (44 tests)
+tests/                           # Unit tests
 .github/workflows/ci.yml        # GitHub Actions CI
 pyproject.toml                   # Package configuration
 requirements.txt                 # Dependencies
 ```
 
+---
+
 ## Requirements
 
 - Python 3.8+
-- See `requirements.txt` for dependencies
+- See `requirements.txt` for full dependency list
 
-## Cookie Setup for Private Boards
-
-1. Log into Pinterest in your browser
-2. Use a cookie export extension (e.g., [Get Token Cookie](https://chrome.google.com/webstore/detail/get-token-cookie/naciaagbkifhpnoodlkhbejjldaiffcm))
-3. Save cookies to `cookies.txt` in the project directory
-4. Run with `-co cookies.txt`
+---
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## Credits
+
+- **Original author:** [Lim Kok Hole](https://github.com/limkokhole)
+- **Fork maintainer:** [HypnosFD](https://github.com/HypnosFD)
