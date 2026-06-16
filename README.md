@@ -224,5 +224,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ## Credits
 
-- **Original author:** [Lim Kok Hole](https://github.com/limkokhole)
+- **Original author:** [limkokhole](https://github.com/limkokhole)
 - **Fork maintainer:** [HypnosFD](https://github.com/HypnosFD)
