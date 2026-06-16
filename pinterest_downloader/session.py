@@ -35,10 +35,8 @@ def get_session(ver_i, proxies, cookie_file):
 
     cookies = load_cookies(cookie_file)
 
-    try:
+    if cookies is not None:
         s.cookies = cookies
-    except (TypeError, ValueError):
-        pass
 
     csrf_token = s.cookies.get('csrftoken', '') if s.cookies else ''
 
