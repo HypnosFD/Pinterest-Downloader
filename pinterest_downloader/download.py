@@ -15,6 +15,7 @@ def download_with_retry(session, url, file_path, proxies, cookie_file, session_v
     if timeout_sequence is None:
         timeout_sequence = RETRY_TIMEOUTS
     is_ok = False
+    r = None
     for t in timeout_sequence:
         cookies = load_cookies(cookie_file)
         try:
@@ -24,7 +25,7 @@ def download_with_retry(session, url, file_path, proxies, cookie_file, session_v
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
             time.sleep(5)
             session = get_session(session_ver, proxies, cookie_file)
-    if not is_ok or not r.ok:
+    if not is_ok or r is None or not r.ok:
         return False, session
     try:
         with open(file_path, 'wb') as f:
