@@ -5,7 +5,7 @@ import requests
 from collections import OrderedDict
 
 from .session import get_session, load_cookies
-from .paths import get_output_file_path, create_dir
+from .paths import get_output_file_path, create_dir, sanitize_fname
 from .ui import cprint, quit, HIGHER_RED, BOLD_ONLY, x_tag, done_tag
 
 RETRY_TIMEOUTS = (15, 30, 40, 50, 60)
@@ -85,6 +85,8 @@ def download_img(image, save_dir, arg_force_update, arg_img_only, arg_v_only, IM
             if len(img_created_at_l) == 5:
                 img_created_at = ''.join(img_created_at_l[1:4])
             human_fname = '_'.join([human_fname, img_created_at])
+
+        human_fname = sanitize_fname(human_fname)
 
         if not arg_v_only and ('images' in image):
             if arg_quality != 'orig' and arg_quality in image.get('images', {}):

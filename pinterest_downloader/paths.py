@@ -2,10 +2,40 @@
 
 import sys
 import os
+import re
 from pathlib import PurePath
 from termcolor import cprint
 
 from .ui import IS_WIN, HIGHER_RED, BOLD_ONLY
+
+
+def sanitize_fname(name):
+    # Replace underscores with spaces first (Pinterest uses _ as word separator)
+    name = name.replace('_', ' ')
+    # Remove emojis and non-ASCII characters (Cyrillic, CJK, etc.)
+    name = re.sub(r'[^\x00-\x7F]+', '', name)
+    # Replace common problematic characters
+    name = name.replace('&', 'and')
+    name = name.replace('#', '')
+    name = name.replace('%', '')
+    name = name.replace('@', '')
+    name = name.replace('!', '')
+    name = name.replace('~', '')
+    name = name.replace('`', '')
+    name = name.replace('+', '')
+    name = name.replace('=', '')
+    name = name.replace('-', ' ')
+    name = name.replace('.', ' ')
+    name = name.replace(',', ' ')
+    name = name.replace('{', '').replace('}', '')
+    name = name.replace('[', '').replace(']', '')
+    name = name.replace('(', '').replace(')', '')
+    # Collapse all whitespace and strip
+    name = re.sub(r'\s+', ' ', name).strip()
+    # Limit to 80 characters to keep filenames short and cross-platform safe
+    if len(name) > 80:
+        name = name[:80].rstrip()
+    return name
 
 
 def sanitize(path):
